@@ -1,0 +1,26 @@
+===== kpExplorer Version 2.43 =======
+
+Explorer-style components for 
+selecting, creating and viewing
+folders
+
+Freeware for non-commercial purposes,
+with sources.
+
+Tested for Delphi 3.0, 5.0, 6.0 and 7.0
+
+Supports
+- associated icons
+- creation of new folders
+- one level up
+- drawing compressed NTFS files in alt color
+- multiple file and folder selection
+- file change notification (optional)
+- network browsing (optional)
+
+(C) Konstantin Polyakov 1998-2002
+
+FIDO    2:5030/542.251
+e-mail: kpolyakov@mail.ru
+Web:    http://kpolyakov.newmail.ru
+        http://kpolyakov.narod.ru

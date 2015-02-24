@@ -1,0 +1,231 @@
+<=============  kpExplorer Version 2.45 =============>
+                                
+Компоненты для выбора/просмотра/создания папок
+в стиле Windows Explorer
+
+Проверены для D3, D5, D6, D7
+
+(C) Konstantin Polyakov 1998-2012
+
+FIDO    2:5030/542.251
+e-mail: kpolyakov@mail.ru
+Web:    http://kpolyakov.newmail.ru 
+        http://kpolyakov.narod.ru 
+
+<=====================================================>
+
+Состав:
+=======
+- TkpFolderTreeView - дерево для просмотра/создания папок
+- TkpFolderCombo    - выбор папки в виде выпадающего списка
+- TkpFileListBox    - список файлов с иконками
+- TkpFileListView   - правая часть Explorer
+
+Поддерживаются
+===============
+- ассоциированные иконки файлов
+- создание новых папок
+- переход на уровень вверх
+- отображение сжатых томов NTFS альтернативным цветом
+- множественный выбор папок и файлов
+- нотификацию об изменениях в файловой системе (отключается)
+- браузинг сети (отключается)
+
+Не поддерживаются
+==================
+- файловые операции (для этого есть Explorer)
+- контекстные меню
+- просмотр виртуальных объектов Shell (Control Panel etc.)
+
+
+Дополнительные свойства и методы
+=================================
+
+1. TkpFolderTreeView, TkpFolderCombo
+-------------------------------------
+    property  AltColor: TColor;         цвет для отображения сжатых
+                                        папок на томах NTFS
+                                        
+    property  DirLabel: TLabel          присоединенная метка, в которой
+                                        отображается текущая папка
+                                        (обновляется автоматически)
+                                        
+    property  Directory: string;        текущая (выбранная) папка
+    
+    property  NetBrowse: Boolean        просматривать сеть? (да/нет)
+
+    property  Notify: Boolean;          поддержка нотификаций (да/нет)
+
+    property  Sorted: Boolean;          сортировать? (да/нет)
+                                        (только TkpFolderTreeView) 
+                                        
+    procedure CreateFolder(GoInside: Boolean);
+                                        создать папку в текущей папке
+                                        GoInside - входить в нее или нет
+                                        (только TkpFolderTreeView)
+                                        
+    property  OneLevelUp;               подняться на один уровень вверх                                    
+    
+    property  OnEditCancel: TTVChangedEvent
+                                        что делать, если при создании
+                                        папки нажали Esc
+                                        (только TkpFolderTreeView)
+
+    property  OnFolderCreated: TFOlderCreatedEvent
+                                        событие после создания новой папки
+                                        (только TkpFolderTreeView)
+                                        
+Клавиатурные команды:
+
+    Shift-Right         раскрыть дерево
+    Shift-Left          свернуть дерево                                         
+    Up                  перейти к предыдущему видимому элементу
+    Down                перейти к следующему видимому элементу
+    F4                  показать дерево каталогов (только TkpFolderCombo)
+    Enter               выбрать каталог (только TkpFolderCombo)
+    Esc                 отказаться от выбора каталога (только TkpFolderCombo)
+    
+
+2. TkpFileListBox
+--------------------
+    property  AltColor: TColor;         цвет для отображения сжатых
+                                        папок и файлов на томах NTFS    
+                                        
+    property  DirLabel: TLabel          присоединенная метка, в которой
+                                        отображается текущая папка
+                                        (обновляется автоматически)
+                                        
+    property  Directory: string;        текущая папка
+    
+    property  FileName: string;         имя выбранного файла или каталога
+
+    property  FileType: TFileType;      группа файлов для отображения
+
+    property  FolderTree: TkpFolderTreeView;
+                                        приосединенное дерево каталогов 
+                                        
+    property  FolderCombo: TkpFolderCombo;                                            
+                                        присоединенный выпадающий список
+                                        для выбора каталога        
+
+    property  FreshDrives: Boolean      если этот флаг установлен,
+                                        пытаемся определить размер и
+                                        свободное место на флоппи-дисках
+
+    property  FoldersOnly: Boolean 	показывать только папки
+
+    property  ItemsCount: integer;      количество элементов в списке                             
+                                        
+    property  Mask: string;             маска для фильтрации файлов
+                                        или группа масок через ';'
+                                        
+    property  NetBrowse: Boolean        просматривать сеть? (да/нет)
+
+    property  Notify: Boolean;          поддержка нотификаций (да/нет)
+    
+    property SelCount: integer;         количество выделенных элементов
+
+    property SelSize: extended;         размер выделенных элементов
+
+    property  ShowFolders: Boolean;     показывать каталоги или нет
+    
+    property  Sorted: Boolean;          сортировать? (да/нет)
+    
+    property TotalSize: extended;       общий объем всех файлов
+
+    procedure GetFilesSelected(List: TStrings);
+                                        заполнить массив строк
+                                        именами выбранных файлов и каталогов;
+                                        для каталогов Objects[i] <> nil
+                                        
+    procedure CreateFolder;             создать папку в текущей папке
+    
+    property  OneLevelUp;               подняться на один уровень вверх
+    
+    property  OnFileSelect;             событие при двойном щелчке на
+                                        имени файла
+                                        
+    property  OnFileListChange;         событие при изменении списка файлов
+
+    property  OnFolderCreated: TFOlderCreatedEvent
+                                        событие после создания новой папки
+
+
+Клавиатурные команды:
+
+    Backspace           на один уровень выше
+    Enter               войти в каталог или выбрать файл
+                        имя файла можно получить в OnFileSelect
+    F5                  обновить список                            
+
+3. TkpFileListView
+--------------------
+    property  AltColor: TColor;         цвет для отображения сжатых
+                                        папок и файлов на томах NTFS
+                                        
+    property  DirLabel: TLabel          присоединенная метка, в которой
+                                        отображается текущая папка
+                                        (обновляется автоматически)
+                                        
+    property  Directory: string;        текущая папка
+    
+    property  FileName: string;         имя выбранного файла или каталога
+
+    property  FileType: TFileType;      группа файлов для отображения
+
+    property  FolderTree: TkpFolderTreeView;
+                                        приоединенное дерево каталогов 
+                                        
+    property  FolderCombo: TkpFolderCombo;
+                                        приоединенный выпадающий список
+                                        для выбора каталога
+                                        
+    property  FreshDrives: Boolean      если этот флаг установлен,
+                                        пытаемся определить размер и
+                                        свободное место на флоппи-дисках
+
+    property  FoldersOnly: Boolean 	показывать только папки
+
+    property  ItemsCount: integer;      количество элементов в списке
+
+    property  Mask: string;             маска для фильтрации файлов
+                                        или группа масок через ';'
+                                        
+    property  NetBrowse: Boolean        просматривать сеть? (да/нет)
+
+    property  Notify: Boolean;          поддержка нотификаций (да/нет)
+    
+    property  SelCount: integer;        количество выделенных элементов
+
+    property  SelSize: extended;        размер выделенных элементов
+
+    property  ShowFolders: Boolean;     показывать каталоги или нет
+
+    property  TotalSize: extended;      общий объем всех файлов
+
+    procedure GetFilesSelected(List: TStrings);
+                                        заполнить массив строк
+                                        именами выбранных файлов и каталогов;
+                                        для каталогов Objects[i] <> nil
+                                        
+    procedure CreateFolder;             создать папку в текущей папке
+    
+    property  OneLevelUp;               подняться на один уровень вверх
+    
+    property  OnFileSelect;             событие при двойном щелчке на
+                                        имени файла
+                                        
+    property  OnFileListChange;         событие при изменении списка файлов
+
+    property  OnFileRename;	  	событие при переименовании файла или 
+					каталога (успешном или нет)	
+
+    property  OnFolderCreated: TFOlderCreatedEvent
+                                        событие после создания новой папки
+
+Клавиатурные команды:
+
+    Backspace           на один уровень выше
+    Enter               войти в каталог или выбрать файл
+                        имя файла можно получить в OnFileSelect
+    F5                  обновить список                            
